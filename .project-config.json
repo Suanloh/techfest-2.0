@@ -1,0 +1,43 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [
+    "server",
+    "db",
+    "user"
+  ],
+  "dev_command": "pnpm run dev",
+  "env_vars": {
+    "DATABASE_URL": "mysql://31af2RPnYj9q9mg.root:9hDZ2mkvm5xke94zv8eR@gateway06.us-east-1.prod.aws.tidbcloud.com:4000/BTtcsLHoQnrdkECwbVoVFy?ssl={\"rejectUnauthorized\":true}"
+  },
+  "experiments": [
+    "no_db_push"
+  ],
+  "git_remote": {
+    "repo_url": "s3://vida-prod-gitrepo/webdev-git/310519663538122366/BTtcsLHoQnrdkECwbVoVFy",
+    "access_key_id": "ASIAZV3A2ECZBODID2FA",
+    "secret_access_key": "3kczDoXIeqbIIrQ1gpgBK9rHfGD06fXCGWDlrWy7",
+    "session_token": "IQoJb3JpZ2luX2VjEPH//////////wEaCXVzLWVhc3QtMSJIMEYCIQDLZQCjLeEJbEoh1FD8hOYGJzbLT/RpiUXKFS7pzBRIbAIhAN3JRVyzeLXX7ZgblGSUHiip640se1jbECGI1tIc1zRgKv8DCLr//////////wEQBBoMNjY1Mzg2MDk4ODY2Igx4U09d/4ydYVxDYG4q0wN/yBcy3NaQKWpfoCbDHoKIfjMTgzKbkg9rtjr4ywWTSau3qXKjVAjp7qWI4WdBbKjVu4eB6sCvM4LAPMr7rAeTtEQE/Ms6vIUSgdhF3ufUdHtNsg6m64UzyTN4cRkxEW+cRjLxqrTdglUtD7bwZKFwYYuihgmcSS59inQF6RPwXuHH5kj84AEra1vixV/Ry9G4gX8v0NPGI/65gsOWAY8zpL/Rd3hNZDLSAR7uwnx9z4JpB4qDDZ5aIdHRBXGhQkDMiNUScdvoot0tAI8T3E4pAMUHM6TCpC2bnBGt/Pxw0g35d4QWnJ9lIlMCNBE4s4a0klbf+71C0WdeibKh9tSJQKcnIuO97xpwDPiJqG4rJuSfiX6F3j5tTEjoXk6o1v9rRIfD/xoiLor14DvMZl9dYr2Or+r3fqdP1+vQefpI7xmtt5yDwrOskdFIz+fzsi5slt8lz/P7UoFy6VRDdsNY52pK6L9kgAfUpTawYTP45pXXBUxyRc0qk8wroP1tnklHFqfXTRxaJf4SAN2Al++W/8WLs78OP3F98afH95atMzjYWw/pBIMRFp0/yA8H+4ogo2I/R8oUL7LvgsG4Daamd1kZFAbUAmvWOCldlmUy4x27gjDno6vQBjqcAanDeS1ERI1+4puDFw/1LY/b9hebZIcPqhA6jcCRSzKx07C/5TM/Ec50Id3dVUHS3o0O/KDPtmly50y1napXAyqWXE+DBDm1fPUKnAPV/ojTU6yvnRtebGkbIj/PGYb9Gmy6lcXEHkRUtUoiiiCFGbpwqz2DnH0qr/EXyH7GiEt49HYFceq+C3a+VIEUbi0p75kUvWQ59njd6Vybvw==",
+    "expiration": "2026-05-18T20:46:31.000Z"
+  },
+  "name": "smart-travel-planner",
+  "path": "/home/ubuntu/smart-travel-planner",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "dpDEfyvuXAxdSvVPiHu6dM",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "Eah6yLf7GHYYqKDNGAv9zy",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "Tomb Stone",
+    "OWNER_OPEN_ID": "Y4Kqyw9WLgmsY92FgGcVeZ",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "ec18c09b-0627-4a70-957f-3006607bc622",
+    "VITE_APP_ID": "BTtcsLHoQnrdkECwbVoVFy",
+    "VITE_APP_LOGO": "",
+    "VITE_APP_TITLE": "Smart Travel Planner",
+    "VITE_FRONTEND_FORGE_API_KEY": "ZPwKwPt2rB5L7DCJcUpKxQ",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im"
+  },
+  "template_id": "web-db-user",
+  "test_command": "pnpm test"
+}
