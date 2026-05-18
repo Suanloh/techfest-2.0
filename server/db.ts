@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, trips } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,69 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+/**
+ * Create a new trip plan for a user.
+ */
+export async function createTrip(
+  userId: number,
+  destination: string,
+  duration: number,
+  budget: number,
+  itinerary: string,
+  budgetBreakdown: string,
+  weatherOverview?: string
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.insert(trips).values({
+    userId,
+    destination,
+    duration,
+    budget,
+    itinerary,
+    budgetBreakdown,
+    weatherOverview,
+  });
+
+  return result;
+}
+
+/**
+ * Get all trips for a specific user.
+ */
+export async function getUserTrips(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return db.select().from(trips).where(eq(trips.userId, userId)).orderBy((t) => t.createdAt);
+}
+
+/**
+ * Get a single trip by ID.
+ */
+export async function getTripById(tripId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.select().from(trips).where(eq(trips.id, tripId)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+/**
+ * Delete a trip by ID.
+ */
+export async function deleteTrip(tripId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.delete(trips).where(eq(trips.id, tripId));
+}

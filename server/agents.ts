@@ -1,0 +1,284 @@
+import { invokeLLM } from "./_core/llm";
+
+/**
+ * Type definitions for agent responses
+ */
+export interface ItineraryDay {
+  day: number;
+  title: string;
+  activities: string[];
+  meals: string[];
+  notes: string;
+}
+
+export interface HotelRecommendation {
+  name: string;
+  type: string;
+  pricePerNight: string;
+  highlights: string[];
+  location: string;
+}
+
+export interface TravelAgentResponse {
+  itinerary: ItineraryDay[];
+  hotels: HotelRecommendation[];
+  localFood: string[];
+  attractions: string[];
+}
+
+export interface BudgetAllocation {
+  accommodation: number;
+  food: number;
+  transport: number;
+  activities: number;
+  contingency: number;
+}
+
+export interface LogisticsAgentResponse {
+  weatherOverview: string;
+  budgetAllocation: BudgetAllocation;
+  recommendations: string[];
+}
+
+/**
+ * Orchestrator Agent
+ *
+ * The main coordinator that receives the trip parameters and delegates work
+ * to specialized sub-agents. It maintains context and ensures coherent planning.
+ */
+export async function orchestratorAgent(
+  destination: string,
+  duration: number,
+  budget: number,
+  onStatusUpdate?: (status: string) => void
+): Promise<{
+  travelPlan: TravelAgentResponse;
+  logistics: LogisticsAgentResponse;
+}> {
+  onStatusUpdate?.("Orchestrator: Analyzing trip requirements");
+
+  // Step 1: Get travel and culture recommendations
+  onStatusUpdate?.("Orchestrator: Delegating to Travel & Culture Agent");
+  const travelPlan = await travelCultureAgent(destination, duration, budget);
+
+  // Step 2: Get logistics and budget breakdown
+  onStatusUpdate?.("Orchestrator: Delegating to Logistics Agent");
+  const logistics = await logisticsAgent(destination, duration, budget, travelPlan);
+
+  onStatusUpdate?.("Orchestrator: Trip plan complete");
+
+  return {
+    travelPlan,
+    logistics,
+  };
+}
+
+/**
+ * Travel & Culture Agent
+ *
+ * Generates a detailed day-by-day itinerary, hotel recommendations,
+ * local food suggestions, and attractions for the destination.
+ */
+export async function travelCultureAgent(
+  destination: string,
+  duration: number,
+  budget: number
+): Promise<TravelAgentResponse> {
+  const systemPrompt = `You are an expert travel planner and cultural guide. Your role is to create detailed, 
+authentic travel itineraries that balance popular attractions with local experiences. You provide practical 
+recommendations for accommodations, dining, and activities that match the traveler's budget and interests.`;
+
+  const userPrompt = `Plan a ${duration}-day trip to ${destination} with a budget of ${budget} currency units.
+
+Provide a comprehensive travel plan including:
+1. A day-by-day itinerary with specific activities, meal recommendations, and local insights
+2. 3-4 hotel recommendations with price ranges and highlights
+3. 5-7 must-try local foods and dishes
+4. 8-10 top attractions and experiences
+
+Format your response as a valid JSON object with the following structure:
+{
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Day title",
+      "activities": ["activity 1", "activity 2"],
+      "meals": ["breakfast", "lunch", "dinner"],
+      "notes": "Additional notes"
+    }
+  ],
+  "hotels": [
+    {
+      "name": "Hotel name",
+      "type": "Budget/Mid-range/Luxury",
+      "pricePerNight": "Price range",
+      "highlights": ["feature 1", "feature 2"],
+      "location": "Location in city"
+    }
+  ],
+  "localFood": ["food 1", "food 2"],
+  "attractions": ["attraction 1", "attraction 2"]
+}`;
+
+  const response = await invokeLLM({
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt },
+    ],
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "travel_plan",
+        strict: true,
+        schema: {
+          type: "object",
+          properties: {
+            itinerary: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  day: { type: "number" },
+                  title: { type: "string" },
+                  activities: { type: "array", items: { type: "string" } },
+                  meals: { type: "array", items: { type: "string" } },
+                  notes: { type: "string" },
+                },
+                required: ["day", "title", "activities", "meals", "notes"],
+                additionalProperties: false,
+              },
+            },
+            hotels: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  type: { type: "string" },
+                  pricePerNight: { type: "string" },
+                  highlights: { type: "array", items: { type: "string" } },
+                  location: { type: "string" },
+                },
+                required: ["name", "type", "pricePerNight", "highlights", "location"],
+                additionalProperties: false,
+              },
+            },
+            localFood: { type: "array", items: { type: "string" } },
+            attractions: { type: "array", items: { type: "string" } },
+          },
+          required: ["itinerary", "hotels", "localFood", "attractions"],
+          additionalProperties: false,
+        },
+      },
+    },
+  });
+
+  // Parse the JSON response from the LLM
+  const content = response.choices[0]?.message.content;
+  if (!content || typeof content !== "string") {
+    throw new Error("No response from Travel & Culture Agent");
+  }
+
+  const parsed = JSON.parse(content);
+  return {
+    itinerary: parsed.itinerary,
+    hotels: parsed.hotels,
+    localFood: parsed.localFood,
+    attractions: parsed.attractions,
+  };
+}
+
+/**
+ * Logistics Agent
+ *
+ * Provides weather overview and calculates budget allocation across
+ * accommodation, food, transport, and activities.
+ */
+export async function logisticsAgent(
+  destination: string,
+  duration: number,
+  budget: number,
+  travelPlan: TravelAgentResponse
+): Promise<LogisticsAgentResponse> {
+  const systemPrompt = `You are a logistics and budget planning expert. Your role is to provide practical 
+weather insights and create realistic budget allocations that align with the travel plan and destination costs.`;
+
+  const hotelInfo = travelPlan.hotels
+    .map((h) => `${h.name} (${h.type}): ${h.pricePerNight} per night`)
+    .join(", ");
+
+  const userPrompt = `For a ${duration}-day trip to ${destination} with a total budget of ${budget} currency units:
+
+Available hotels: ${hotelInfo}
+
+Provide:
+1. A brief weather overview for the destination (what to expect, what to pack)
+2. A realistic budget breakdown allocating the total budget across:
+   - Accommodation (based on hotel prices)
+   - Food and dining
+   - Local transport and activities
+   - Contingency/miscellaneous
+
+Format your response as a valid JSON object with the following structure:
+{
+  "weatherOverview": "Description of weather conditions",
+  "budgetAllocation": {
+    "accommodation": number,
+    "food": number,
+    "transport": number,
+    "activities": number,
+    "contingency": number
+  },
+  "recommendations": ["recommendation 1", "recommendation 2"]
+}
+
+Ensure the budget allocation sums to approximately ${budget}.`;
+
+  const response = await invokeLLM({
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt },
+    ],
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        name: "logistics_plan",
+        strict: true,
+        schema: {
+          type: "object",
+          properties: {
+            weatherOverview: { type: "string" },
+            budgetAllocation: {
+              type: "object",
+              properties: {
+                accommodation: { type: "number" },
+                food: { type: "number" },
+                transport: { type: "number" },
+                activities: { type: "number" },
+                contingency: { type: "number" },
+              },
+              required: ["accommodation", "food", "transport", "activities", "contingency"],
+              additionalProperties: false,
+            },
+            recommendations: { type: "array", items: { type: "string" } },
+          },
+          required: ["weatherOverview", "budgetAllocation", "recommendations"],
+          additionalProperties: false,
+        },
+      },
+    },
+  });
+
+  // Parse the JSON response from the LLM
+  const content = response.choices[0]?.message.content;
+  if (!content || typeof content !== "string") {
+    throw new Error("No response from Logistics Agent");
+  }
+
+  const parsed = JSON.parse(content);
+  return {
+    weatherOverview: parsed.weatherOverview,
+    budgetAllocation: parsed.budgetAllocation,
+    recommendations: parsed.recommendations,
+  };
+}

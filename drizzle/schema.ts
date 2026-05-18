@@ -25,4 +25,22 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Trips table stores completed trip plans with itinerary and budget breakdown.
+ * Each trip is associated with a user and contains the full planning results.
+ */
+export const trips = mysqlTable("trips", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  destination: varchar("destination", { length: 255 }).notNull(),
+  duration: int("duration").notNull(), // Number of days
+  budget: int("budget").notNull(), // Budget in cents or smallest currency unit
+  itinerary: text("itinerary").notNull(), // JSON string containing day-by-day itinerary
+  budgetBreakdown: text("budgetBreakdown").notNull(), // JSON string with budget allocation
+  weatherOverview: text("weatherOverview"), // JSON string with weather data
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Trip = typeof trips.$inferSelect;
+export type InsertTrip = typeof trips.$inferInsert;
