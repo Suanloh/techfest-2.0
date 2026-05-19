@@ -48,41 +48,41 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
     format: "a4",
   });
 
-  // Set colors for dark theme
-  const darkBg = [20, 20, 20]; // Dark background
-  const lightText = [240, 240, 240]; // Light text
-  const accentColor = [255, 255, 255]; // White accent
-  const mutedText = [160, 160, 160]; // Muted text
+  // Set colors for dark theme (as tuples for TypeScript compatibility)
+  const darkBg: [number, number, number] = [20, 20, 20]; // Dark background
+  const lightText: [number, number, number] = [240, 240, 240]; // Light text
+  const accentColor: [number, number, number] = [255, 255, 255]; // White accent
+  const mutedText: [number, number, number] = [160, 160, 160]; // Muted text
 
   let yPosition = 20;
 
   // Header with destination
-  pdf.setFillColor(...darkBg);
+  pdf.setFillColor(darkBg[0], darkBg[1], darkBg[2]);
   pdf.rect(0, 0, 210, 40, "F");
 
-  pdf.setTextColor(...accentColor);
+  pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
   pdf.setFontSize(28);
   pdf.setFont("helvetica", "bold");
   pdf.text(data.destination.toUpperCase(), 20, 20);
 
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "normal");
-  pdf.setTextColor(...mutedText);
+  pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
   pdf.text(`${data.duration} DAYS | BUDGET: ${data.budget.toLocaleString()}`, 20, 32);
 
   yPosition = 50;
 
   // Weather Overview Section
-  pdf.setTextColor(...accentColor);
+  pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
   pdf.setFontSize(14);
   pdf.setFont("helvetica", "bold");
   pdf.text("WEATHER & CONDITIONS", 20, yPosition);
 
-  pdf.setDrawColor(...mutedText);
+  pdf.setDrawColor(mutedText[0], mutedText[1], mutedText[2]);
   pdf.line(20, yPosition + 2, 190, yPosition + 2);
 
   yPosition += 12;
-  pdf.setTextColor(...lightText);
+  pdf.setTextColor(lightText[0], lightText[1], lightText[2]);
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "normal");
   const weatherLines = pdf.splitTextToSize(data.weatherOverview, 170);
@@ -90,12 +90,12 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
   yPosition += weatherLines.length * 5 + 10;
 
   // Itinerary Section
-  pdf.setTextColor(...accentColor);
+  pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
   pdf.setFontSize(14);
   pdf.setFont("helvetica", "bold");
   pdf.text("ITINERARY", 20, yPosition);
 
-  pdf.setDrawColor(...mutedText);
+  pdf.setDrawColor(mutedText[0], mutedText[1], mutedText[2]);
   pdf.line(20, yPosition + 2, 190, yPosition + 2);
 
   yPosition += 12;
@@ -108,7 +108,7 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
     }
 
     // Day header
-    pdf.setTextColor(...accentColor);
+    pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
     pdf.setFontSize(12);
     pdf.setFont("helvetica", "bold");
     pdf.text(`DAY ${day.day}: ${day.title}`, 20, yPosition);
@@ -116,13 +116,13 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
 
     // Activities
     if (day.activities.length > 0) {
-      pdf.setTextColor(...mutedText);
+      pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "bold");
       pdf.text("Activities:", 25, yPosition);
       yPosition += 5;
 
-      pdf.setTextColor(...lightText);
+      pdf.setTextColor(lightText[0], lightText[1], lightText[2]);
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
       for (const activity of day.activities) {
@@ -135,13 +135,13 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
 
     // Meals
     if (day.meals.length > 0) {
-      pdf.setTextColor(...mutedText);
+      pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "bold");
       pdf.text("Meals:", 25, yPosition);
       yPosition += 5;
 
-      pdf.setTextColor(...lightText);
+      pdf.setTextColor(lightText[0], lightText[1], lightText[2]);
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
       for (const meal of day.meals) {
@@ -154,13 +154,13 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
 
     // Notes
     if (day.notes) {
-      pdf.setTextColor(...mutedText);
+      pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "bold");
       pdf.text("Notes:", 25, yPosition);
       yPosition += 5;
 
-      pdf.setTextColor(...lightText);
+      pdf.setTextColor(lightText[0], lightText[1], lightText[2]);
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
       const noteLines = pdf.splitTextToSize(day.notes, 165);
@@ -178,12 +178,12 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
       yPosition = 20;
     }
 
-    pdf.setTextColor(...accentColor);
+    pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
     pdf.setFontSize(14);
     pdf.setFont("helvetica", "bold");
     pdf.text("HOTEL RECOMMENDATIONS", 20, yPosition);
 
-    pdf.setDrawColor(...mutedText);
+    pdf.setDrawColor(mutedText[0], mutedText[1], mutedText[2]);
     pdf.line(20, yPosition + 2, 190, yPosition + 2);
 
     yPosition += 12;
@@ -194,19 +194,19 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
         yPosition = 20;
       }
 
-      pdf.setTextColor(...accentColor);
+      pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
       pdf.setFontSize(11);
       pdf.setFont("helvetica", "bold");
       pdf.text(hotel.name, 20, yPosition);
 
-      pdf.setTextColor(...mutedText);
+      pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
       pdf.text(`${hotel.type} | ${hotel.location} | ${hotel.pricePerNight}`, 20, yPosition + 6);
 
       yPosition += 12;
 
-      pdf.setTextColor(...lightText);
+      pdf.setTextColor(lightText[0], lightText[1], lightText[2]);
       pdf.setFontSize(9);
       for (const highlight of hotel.highlights) {
         const highlightLines = pdf.splitTextToSize(`• ${highlight}`, 170);
@@ -224,24 +224,24 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
     yPosition = 20;
   }
 
-  pdf.setTextColor(...accentColor);
+  pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
   pdf.setFontSize(14);
   pdf.setFont("helvetica", "bold");
   pdf.text("LOCAL FOOD & ATTRACTIONS", 20, yPosition);
 
-  pdf.setDrawColor(...mutedText);
+  pdf.setDrawColor(mutedText[0], mutedText[1], mutedText[2]);
   pdf.line(20, yPosition + 2, 190, yPosition + 2);
 
   yPosition += 12;
 
   if (data.localFood.length > 0) {
-    pdf.setTextColor(...mutedText);
+    pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
     pdf.setFontSize(10);
     pdf.setFont("helvetica", "bold");
     pdf.text("Must-Try Foods:", 20, yPosition);
     yPosition += 6;
 
-    pdf.setTextColor(...lightText);
+    pdf.setTextColor(lightText[0], lightText[1], lightText[2]);
     pdf.setFontSize(9);
     pdf.setFont("helvetica", "normal");
     for (const food of data.localFood) {
@@ -258,13 +258,13 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
       yPosition = 20;
     }
 
-    pdf.setTextColor(...mutedText);
+    pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
     pdf.setFontSize(10);
     pdf.setFont("helvetica", "bold");
     pdf.text("Top Attractions:", 20, yPosition);
     yPosition += 6;
 
-    pdf.setTextColor(...lightText);
+    pdf.setTextColor(lightText[0], lightText[1], lightText[2]);
     pdf.setFontSize(9);
     pdf.setFont("helvetica", "normal");
     for (const attraction of data.attractions) {
@@ -281,12 +281,12 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
     yPosition = 20;
   }
 
-  pdf.setTextColor(...accentColor);
+  pdf.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
   pdf.setFontSize(14);
   pdf.setFont("helvetica", "bold");
   pdf.text("BUDGET BREAKDOWN", 20, yPosition);
 
-  pdf.setDrawColor(...mutedText);
+  pdf.setDrawColor(mutedText[0], mutedText[1], mutedText[2]);
   pdf.line(20, yPosition + 2, 190, yPosition + 2);
 
   yPosition += 12;
@@ -347,7 +347,7 @@ export async function generateTripPDF(data: TripPDFData): Promise<Buffer> {
   const pageCount = (pdf as any).internal.pages.length - 1;
   for (let i = 1; i <= pageCount; i++) {
     pdf.setPage(i);
-    pdf.setTextColor(...mutedText);
+    pdf.setTextColor(mutedText[0], mutedText[1], mutedText[2]);
     pdf.setFontSize(8);
     pdf.text(
       `Page ${i} of ${pageCount}`,
