@@ -4,19 +4,19 @@ import { useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
 import { Compass, Sparkles, Waves, MapPin, CloudSun, Wallet } from "lucide-react";
 
-const agentCards = [
+const AGENT_FEATURES = [
   {
-    icon: <Compass className="h-5 w-5" />,
+    icon: Compass,
     title: "Planner Agent",
     text: "Builds a balanced itinerary around your pace, priorities, and travel dates.",
   },
   {
-    icon: <Waves className="h-5 w-5" />,
+    icon: Waves,
     title: "Local Discovery Agent",
     text: "Finds cozy cafés, local gems, and meaningful experiences beyond tourist crowds.",
   },
   {
-    icon: <CloudSun className="h-5 w-5" />,
+    icon: CloudSun,
     title: "Logistics Agent",
     text: "Optimizes timing, transit, and weather windows so each day feels stress-free.",
   },
@@ -72,11 +72,11 @@ export default function Home() {
         </div>
       </header>
 
-      <main>
+      <main aria-label="Main content">
         <section className="container py-16 md:py-24 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-1 text-sm text-secondary font-medium">
-              <Sparkles className="h-4 w-4" />
+            <p className="inline-flex items-center gap-2 rounded-full bg-secondary/15 px-4 py-1 text-sm text-foreground font-medium">
+              <Sparkles className="h-4 w-4 text-secondary" />
               AI-powered, calm by design
             </p>
             <h1 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight">
@@ -101,7 +101,11 @@ export default function Home() {
                   </Button>
                 </a>
               )}
-              <Button variant="outline" className="rounded-full px-8 py-6 text-base border-border/80 bg-card/60">
+              <Button
+                variant="outline"
+                className="rounded-full px-8 py-6 text-base border-border/80 bg-card/60"
+                onClick={() => setLocation("/plan")}
+              >
                 View sample itinerary
               </Button>
             </div>
@@ -117,7 +121,7 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="rounded-[2rem] border border-border/80 bg-card p-8 shadow-sm">
+          <div role="complementary" aria-label="Trip preview example" className="rounded-[2rem] border border-border/80 bg-card p-8 shadow-sm">
             <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Trip Preview</p>
             <h2 className="mt-3 text-2xl font-semibold">Lisbon • 5 Days</h2>
             <p className="mt-2 text-muted-foreground">Sunset viewpoints, pastel streets, and seafood nights.</p>
@@ -132,10 +136,10 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <div className="mt-6 rounded-2xl bg-secondary/10 px-4 py-3 text-sm text-secondary font-medium">
+            <div className="mt-6 rounded-2xl bg-secondary/15 px-4 py-3 text-sm text-foreground font-medium">
               Budget prediction: 16% under target.
             </div>
-          </aside>
+          </div>
         </section>
 
         <section className="container py-16 border-t border-border/80">
@@ -151,14 +155,14 @@ export default function Home() {
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {agentCards.map((card) => (
-              <article key={card.title} className="rounded-[1.75rem] border border-border/80 bg-card p-7 shadow-sm">
+            {AGENT_FEATURES.map((card) => (
+              <div key={card.title} className="rounded-[1.75rem] border border-border/80 bg-card p-7 shadow-sm">
                 <div className="h-11 w-11 rounded-2xl bg-accent/15 text-accent flex items-center justify-center">
-                  {card.icon}
+                  <card.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold">{card.title}</h3>
                 <p className="mt-3 text-muted-foreground leading-relaxed">{card.text}</p>
-              </article>
+              </div>
             ))}
           </div>
         </section>
