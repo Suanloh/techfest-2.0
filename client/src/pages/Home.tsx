@@ -46,8 +46,8 @@ export default function Home() {
               <Compass className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Atlas AI</p>
-              <p className="text-lg font-semibold">Smart Trip Planner</p>
+              <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Generative AI</p>
+              <p className="text-lg font-semibold">Smart Travel Planner</p>
             </div>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
@@ -80,10 +80,10 @@ export default function Home() {
               AI-powered, calm by design
             </p>
             <h1 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight">
-              Cozy, intelligent travel planning in one inviting workspace.
+              Intelligent travel planning in one inviting workspace.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl leading-relaxed">
-              Atlas AI coordinates specialized agents to craft your itinerary, optimize your budget, and
+              STRAP coordinates specialized agents to craft your itinerary, optimize your budget, and
               surface meaningful local experiences—so planning feels simple, clear, and comfortable.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -190,7 +190,7 @@ export default function Home() {
             <div>
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Ready for your next soft landing?</h2>
               <p className="mt-3 text-muted-foreground max-w-xl leading-relaxed">
-                Share your destination and budget. Atlas AI handles the details while you focus on the journey.
+                Share your destination and budget. We handles the details while you focus on the journey.
               </p>
             </div>
             {isAuthenticated ? (

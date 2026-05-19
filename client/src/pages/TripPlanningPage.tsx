@@ -118,7 +118,7 @@ export default function TripPlanningPage() {
               </h1>
               <div className="w-24 h-1.5 bg-accent" />
               <p className="text-muted-foreground mt-4 max-w-2xl">
-                Tell us where you want to go, how long you'll stay, and your budget. Our AI agents will
+                Tell us where you want to go, how long you'll stay, and your budget. We will
                 create a personalized itinerary, recommend hotels, suggest local foods, and break down
                 your budget across accommodation, food, transport, and activities.
               </p>
