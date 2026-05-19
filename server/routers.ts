@@ -47,7 +47,7 @@ export const appRouter = router({
           const budgetBreakdownJson = JSON.stringify(result.logistics.budgetAllocation);
           const weatherJson = result.logistics.weatherOverview;
 
-          await createTrip(
+          const tripId = await createTrip(
             ctx.user.id,
             destination,
             duration,
@@ -57,7 +57,10 @@ export const appRouter = router({
             weatherJson
           );
 
-          return result;
+          return {
+            ...result,
+            tripId,
+          };
         } catch (error) {
           console.error("Error planning trip:", error);
           throw new TRPCError({
@@ -162,6 +165,65 @@ export const appRouter = router({
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Failed to delete trip.",
+          });
+        }
+      }),
+
+    /**
+     * Export a trip as a PDF document.
+     * Generates a professional PDF with itinerary, hotels, budget breakdown, and attractions.
+     */
+    exportPDF: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const { getTripById } = await import("./db");
+        const { generateTripPDF } = await import("./pdf-generator");
+
+        try {
+          const trip = await getTripById(input.id);
+          if (!trip) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "Trip not found.",
+            });
+          }
+
+          // Verify ownership
+          if (trip.userId !== ctx.user.id) {
+            throw new TRPCError({
+              code: "FORBIDDEN",
+              message: "You do not have access to this trip.",
+            });
+          }
+
+          // Parse the stored JSON data
+          const itinerary = JSON.parse(trip.itinerary);
+          const budgetBreakdown = JSON.parse(trip.budgetBreakdown);
+
+          // Generate PDF
+          const pdfBuffer = await generateTripPDF({
+            destination: trip.destination,
+            duration: trip.duration,
+            budget: trip.budget,
+            itinerary: itinerary.itinerary || [],
+            hotels: itinerary.hotels || [],
+            localFood: itinerary.localFood || [],
+            attractions: itinerary.attractions || [],
+            weatherOverview: trip.weatherOverview || "Weather information not available.",
+            budgetAllocation: budgetBreakdown,
+          });
+
+          // Return PDF as base64 for download
+          return {
+            pdf: pdfBuffer.toString("base64"),
+            filename: `${trip.destination.replace(/\s+/g, "-").toLowerCase()}-trip-plan.pdf`,
+          };
+        } catch (error) {
+          if (error instanceof TRPCError) throw error;
+          console.error("Error exporting trip to PDF:", error);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Failed to export trip to PDF.",
           });
         }
       }),
