@@ -91,6 +91,7 @@ export async function getUserByOpenId(openId: string) {
 
 /**
  * Create a new trip plan for a user.
+ * Returns the newly created trip ID.
  */
 export async function createTrip(
   userId: number,
@@ -100,7 +101,7 @@ export async function createTrip(
   itinerary: string,
   budgetBreakdown: string,
   weatherOverview?: string
-) {
+): Promise<number> {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");
@@ -116,7 +117,17 @@ export async function createTrip(
     weatherOverview,
   });
 
-  return result;
+  // Get the newly inserted trip ID
+  const insertedTrip = await db.select().from(trips)
+    .where(eq(trips.userId, userId))
+    .orderBy((t) => t.createdAt)
+    .limit(1);
+
+  if (insertedTrip.length === 0) {
+    throw new Error("Failed to retrieve created trip ID");
+  }
+
+  return insertedTrip[0].id;
 }
 
 /**

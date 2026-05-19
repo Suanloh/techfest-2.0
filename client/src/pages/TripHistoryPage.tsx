@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Loader2, Trash2, Eye } from "lucide-react";
+import { Loader2, Trash2, Eye, Download } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
+import PDFExportButton from "@/components/PDFExportButton";
 
 export default function TripHistoryPage() {
   const [, setLocation] = useLocation();
@@ -100,6 +101,9 @@ export default function TripHistoryPage() {
                     <Eye className="w-4 h-4" />
                     View
                   </Button>
+                  <div className="flex-1">
+                    <PDFExportButton tripId={trip.id} destination={trip.destination} variant="outline" />
+                  </div>
                   <Button
                     onClick={() => handleDelete(trip.id)}
                     variant="outline"
