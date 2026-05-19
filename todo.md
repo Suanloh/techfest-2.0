@@ -40,4 +40,17 @@
 - [x] Test agent orchestration and LLM integration
 - [x] Test trip history CRUD operations
 - [x] Manual testing of full user flow
-- [ ] Create checkpoint and deploy
+- [x] Create checkpoint and deploy
+
+## PDF Export Feature
+- [x] Install PDF generation dependencies (jsPDF, html2pdf.js, canvas, jspdf-autotable)
+- [x] Create backend PDF generation helper function with dark theme styling
+- [x] Create tRPC procedure for generating trip PDF (trips.exportPDF)
+- [x] Add export button to TripResults component
+- [x] Implement PDF download in frontend with base64 decoding
+- [x] Style PDF output to match dark theme aesthetic (monochromatic grayscale)
+- [x] Modify createTrip to return trip ID for immediate export
+- [x] Update trips.plan to return tripId so fresh results can be exported
+- [x] Add PDF export button to trip history cards
+- [x] Test PDF generation and export functionality
+- [x] Update checkpoint with PDF export feature

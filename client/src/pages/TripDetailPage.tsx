@@ -72,6 +72,7 @@ export default function TripDetailPage() {
           travelPlan={trip.itinerary}
           budgetAllocation={trip.budgetBreakdown}
           weatherOverview={trip.weatherOverview || ""}
+          tripId={trip.id}
           onNewTrip={() => setLocation("/")}
         />
       </div>

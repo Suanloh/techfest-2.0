@@ -38,6 +38,7 @@ interface TripPlanResult {
     };
     recommendations: string[];
   };
+  tripId: number;
 }
 
 export default function TripPlanningPage() {
@@ -48,6 +49,7 @@ export default function TripPlanningPage() {
     destination: string;
     duration: number;
     budget: number;
+    tripId: number;
     result: TripPlanResult;
   } | null>(null);
 
@@ -79,11 +81,13 @@ export default function TripPlanningPage() {
 
       clearInterval(agentInterval);
 
+      const planResult = result as TripPlanResult;
       setTripData({
         destination,
         duration,
         budget,
-        result: result as TripPlanResult,
+        tripId: planResult.tripId,
+        result: planResult,
       });
 
       setState("results");
@@ -164,6 +168,7 @@ export default function TripPlanningPage() {
             travelPlan={tripData.result.travelPlan}
             budgetAllocation={tripData.result.logistics.budgetAllocation}
             weatherOverview={tripData.result.logistics.weatherOverview}
+            tripId={tripData.tripId}
             onSaveTrip={handleSaveTrip}
             onNewTrip={handleNewTrip}
           />

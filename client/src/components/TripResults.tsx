@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Cloud, Hotel, UtensilsIcon } from "lucide-react";
 import ItineraryTimeline from "./ItineraryTimeline";
 import BudgetChart from "./BudgetChart";
+import PDFExportButton from "./PDFExportButton";
 
 interface ItineraryDay {
   day: number;
@@ -42,6 +43,7 @@ interface TripResultsProps {
   travelPlan: TravelPlan;
   budgetAllocation: BudgetAllocation;
   weatherOverview: string;
+  tripId?: number;
   onSaveTrip?: () => void;
   onNewTrip?: () => void;
 }
@@ -53,6 +55,7 @@ export default function TripResults({
   travelPlan,
   budgetAllocation,
   weatherOverview,
+  tripId,
   onSaveTrip,
   onNewTrip,
 }: TripResultsProps) {
@@ -201,6 +204,11 @@ export default function TripResults({
           >
             Save This Trip
           </Button>
+        )}
+        {tripId && (
+          <div className="flex-1">
+            <PDFExportButton tripId={tripId} destination={destination} />
+          </div>
         )}
         {onNewTrip && (
           <Button
