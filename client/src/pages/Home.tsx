@@ -2,7 +2,25 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { getLoginUrl } from "@/const";
-import { MapPin, Zap, TrendingUp } from "lucide-react";
+import { Compass, Sparkles, Waves, MapPin, CloudSun, Wallet } from "lucide-react";
+
+const AGENT_FEATURES = [
+  {
+    icon: Compass,
+    title: "Planner Agent",
+    text: "Builds a balanced itinerary around your pace, priorities, and travel dates.",
+  },
+  {
+    icon: Waves,
+    title: "Local Discovery Agent",
+    text: "Finds cozy cafés, local gems, and meaningful experiences beyond tourist crowds.",
+  },
+  {
+    icon: CloudSun,
+    title: "Logistics Agent",
+    text: "Optimizes timing, transit, and weather windows so each day feels stress-free.",
+  },
+];
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -20,118 +38,178 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="container py-20 md:py-32">
-        <div className="max-w-4xl">
-          <h1 className="text-6xl md:text-7xl font-black uppercase tracking-tighter text-foreground mb-6">
-            Plan Your Perfect Trip
-          </h1>
-          <div className="w-32 h-2 bg-accent mb-8" />
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
-            Powered by AI agents that orchestrate your entire travel experience. Get personalized
-            itineraries, hotel recommendations, local food suggestions, and smart budget breakdowns—all
-            in seconds.
-          </p>
-
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border/80 bg-card/40 backdrop-blur-sm">
+        <div className="container flex items-center justify-between py-6">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-accent/15 text-accent flex items-center justify-center">
+              <Compass className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Generative AI</p>
+              <p className="text-lg font-semibold">Smart Travel Planner</p>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
+            <span>Agents</span>
+            <span>How it works</span>
+            <span>Pricing</span>
+          </div>
           {isAuthenticated ? (
             <Button
               onClick={() => setLocation("/plan")}
-              className="bg-accent text-accent-foreground hover:bg-accent/90 font-black uppercase tracking-wider py-8 px-12 text-lg transition-all duration-200 active:scale-95"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-6"
             >
-              Start Planning
+              Plan a trip
             </Button>
           ) : (
             <a href={getLoginUrl()}>
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-black uppercase tracking-wider py-8 px-12 text-lg transition-all duration-200 active:scale-95">
-                Sign In to Begin
+              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-6">
+                Get started
               </Button>
             </a>
           )}
         </div>
-      </div>
+      </header>
 
-      {/* Features Section */}
-      <div className="container py-20 border-t border-border">
-        <div className="mb-16">
-          <h2 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-2">
-            How It Works
-          </h2>
-          <div className="w-24 h-1.5 bg-accent" />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Feature 1 */}
-          <div className="p-8 bg-card border border-border">
-            <div className="w-12 h-12 bg-accent text-accent-foreground flex items-center justify-center mb-6">
-              <MapPin className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-black uppercase tracking-wide text-foreground mb-3">
-              Orchestrator Agent
-            </h3>
-            <p className="text-muted-foreground">
-              Coordinates your entire trip planning process, delegating tasks to specialized agents for
-              comprehensive coverage.
+      <main aria-label="Main content">
+        <section className="container py-16 md:py-24 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full bg-secondary/15 px-4 py-1 text-sm text-foreground font-medium">
+              <Sparkles className="h-4 w-4 text-secondary" />
+              AI-powered, calm by design
             </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="p-8 bg-card border border-border">
-            <div className="w-12 h-12 bg-accent text-accent-foreground flex items-center justify-center mb-6">
-              <Zap className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-black uppercase tracking-wide text-foreground mb-3">
-              Travel & Culture Agent
-            </h3>
-            <p className="text-muted-foreground">
-              Generates detailed itineraries, recommends hotels, suggests local foods, and highlights
-              must-see attractions.
+            <h1 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight tracking-tight">
+              Intelligent travel planning in one inviting workspace.
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground max-w-2xl leading-relaxed">
+              STRAP coordinates specialized agents to craft your itinerary, optimize your budget, and
+              surface meaningful local experiences—so planning feels simple, clear, and comfortable.
             </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="p-8 bg-card border border-border">
-            <div className="w-12 h-12 bg-accent text-accent-foreground flex items-center justify-center mb-6">
-              <TrendingUp className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-black uppercase tracking-wide text-foreground mb-3">
-              Logistics Agent
-            </h3>
-            <p className="text-muted-foreground">
-              Provides weather insights and intelligently allocates your budget across accommodation,
-              food, transport, and activities.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="container py-20 border-t border-border">
-        <div className="max-w-2xl">
-          <h2 className="text-4xl font-black uppercase tracking-tighter text-foreground mb-6">
-            Ready to Explore?
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            Whether you're planning a weekend getaway or a month-long adventure, our AI-powered system
-            will create a trip tailored to your preferences and budget.
-          </p>
-
-          {isAuthenticated ? (
-            <Button
-              onClick={() => setLocation("/plan")}
-              className="bg-accent text-accent-foreground hover:bg-accent/90 font-black uppercase tracking-wider py-8 px-12 text-lg transition-all duration-200 active:scale-95"
-            >
-              Plan Your Trip Now
-            </Button>
-          ) : (
-            <a href={getLoginUrl()}>
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-black uppercase tracking-wider py-8 px-12 text-lg transition-all duration-200 active:scale-95">
-                Get Started
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              {isAuthenticated ? (
+                <Button
+                  onClick={() => setLocation("/plan")}
+                  className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-8 py-6 text-base"
+                >
+                  Start planning
+                </Button>
+              ) : (
+                <a href={getLoginUrl()}>
+                  <Button className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-8 py-6 text-base">
+                    Sign in to begin
+                  </Button>
+                </a>
+              )}
+              <Button
+                variant="outline"
+                className="rounded-full px-8 py-6 text-base border-border/80 bg-card/60"
+                onClick={() => setLocation("/plan")}
+              >
+                View sample itinerary
               </Button>
-            </a>
-          )}
-        </div>
-      </div>
+            </div>
+            <div className="mt-8 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-secondary" />
+                4.9/5 traveler satisfaction
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-accent" />
+                120+ destinations covered
+              </div>
+            </div>
+          </div>
+
+          <div role="complementary" aria-label="Trip preview example" className="rounded-[2rem] border border-border/80 bg-card p-8 shadow-sm">
+            <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Trip Preview</p>
+            <h2 className="mt-3 text-2xl font-semibold">Lisbon • 5 Days</h2>
+            <p className="mt-2 text-muted-foreground">Sunset viewpoints, pastel streets, and seafood nights.</p>
+            <div className="mt-6 space-y-3 text-sm">
+              {[
+                "Day 1: Alfama walk + Fado dinner",
+                "Day 2: Belém landmarks + riverside cafés",
+                "Day 3: Sintra day trip with flexible pacing",
+              ].map((item) => (
+                <div key={item} className="rounded-2xl border border-border/80 bg-background/90 px-4 py-3">
+                  {item}
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 rounded-2xl bg-secondary/15 px-4 py-3 text-sm text-foreground font-medium">
+              Budget prediction: 16% under target.
+            </div>
+          </div>
+        </section>
+
+        <section className="container py-16 border-t border-border/80">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">AI agents</p>
+              <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight">A friendly team for every trip</h2>
+            </div>
+            <p className="max-w-lg text-muted-foreground leading-relaxed">
+              Each agent has one clear role, giving you a polished plan with thoughtful details and readable
+              recommendations.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {AGENT_FEATURES.map((card) => (
+              <div key={card.title} className="rounded-[1.75rem] border border-border/80 bg-card p-7 shadow-sm">
+                <div className="h-11 w-11 rounded-2xl bg-accent/15 text-accent flex items-center justify-center">
+                  <card.icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-5 text-xl font-semibold">{card.title}</h3>
+                <p className="mt-3 text-muted-foreground leading-relaxed">{card.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="container py-16 border-t border-border/80">
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              { icon: <Wallet className="h-5 w-5" />, label: "Budget clarity", value: "Transparent daily costs" },
+              { icon: <MapPin className="h-5 w-5" />, label: "Local picks", value: "Handpicked neighborhoods" },
+              { icon: <Sparkles className="h-5 w-5" />, label: "Flexible flow", value: "Easy pace adjustments" },
+            ].map((item) => (
+              <div key={item.label} className="rounded-[1.75rem] border border-border/80 bg-card p-6 shadow-sm">
+                <div className="flex items-center gap-3 text-secondary">
+                  {item.icon}
+                  <span className="text-sm uppercase tracking-[0.2em]">{item.label}</span>
+                </div>
+                <p className="mt-4 text-2xl font-semibold">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="container py-16 border-t border-border/80">
+          <div className="rounded-[2rem] bg-accent/10 border border-accent/25 p-10 md:p-14 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Ready for your next soft landing?</h2>
+              <p className="mt-3 text-muted-foreground max-w-xl leading-relaxed">
+                Share your destination and budget. We handles the details while you focus on the journey.
+              </p>
+            </div>
+            {isAuthenticated ? (
+              <Button
+                onClick={() => setLocation("/plan")}
+                className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-8 py-6 text-base"
+              >
+                Plan my trip
+              </Button>
+            ) : (
+              <a href={getLoginUrl()}>
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-8 py-6 text-base">
+                  Get started
+                </Button>
+              </a>
+            )}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
